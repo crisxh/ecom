@@ -63,6 +63,12 @@ const PaymentForm = () => {
           isLoading={isProcessingPayment} 
           buttonType={ BUTTON_TYPE_CLASSES.inverted }
         >Pay now</PaymentButton>
+        
+        <p style={{
+          marginLeft: 'auto', 
+          width: 'fit-content', 
+          color: 'gold'
+        }}>Testing card: 4242 4242 4242 4242</p>
 
       </FormContainer>
     </PaymentFromContainer>
