@@ -7,6 +7,7 @@ import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
 import './sign-in-form.styles.scss'
+import { AuthError, AuthErrorCodes } from "firebase/auth";
 
 const defaultFormFields = {
   email: "",
@@ -26,7 +27,7 @@ const SignInForm = () => {
     dispatch(googleSignInStart());
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
@@ -35,22 +36,18 @@ const SignInForm = () => {
       resetFormField();
 
     } catch (err) {
-
-      switch (err.code) {
-        case 'auth/wrong-password':
-          alert('Incorrect password for email');
-          break;
-        case 'auth/user-not-found':
-          alert('No user associated with this email');
-          break;
-        default:
-          console.log("Error: ", err);
+      if((err as AuthError).code === AuthErrorCodes.INVALID_PASSWORD) {
+        alert('Incorrect password for email');
+      } else if ((err as AuthError).code === 'auth/user-not-found') {
+        alert('No user associated with this email');
+      }  else {
+        console.log("Error: ", err);
       }
 
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormFields({ ...formFields, [name]: value });
   };
